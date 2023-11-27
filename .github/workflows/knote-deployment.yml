@@ -39,32 +39,30 @@ jobs:
       shell: bash
 
     # Install kubectl on the docker
-    - uses: azure/setup-kubectl@v3
+    - uses: azure/setup-kubectl@v2.0
       with:
-        version: 'latest' # default is latest stable
+        version: 'v1.24.0' # default is latest stable
       id: install
     
     # Configure AWS Credentials for docker access
-		# - name: Configure AWS Credentials
-		#   uses: aws-actions/configure-aws-credentials@v4
-		#   with:
-    #     aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-    #     aws-region: ${{ env.AWS_DEFAULT_REGION }}
+		- name: Configure AWS Credentials
+		  uses: aws-actions/configure-aws-credentials@v4
+		  with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
-        aws-region: us-east-2
+    # - name: Configure AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v4
+    #   with:
+    #     managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
+    #     aws-region: us-east-2
 
     # Kubernetes config update to allow kubectl to work within the context
 		- name: Update kube config to allow kubectl to work within the context
 		  # run: aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }}  --name ${{ env.EKS_CLUSTER }}
-      run: |
-        aws eks update-kubeconfig --region $(terraform output -raw region) --name $(terraform output -raw cluster_name)
-      # run: aws eks update-kubeconfig --region us-east-2 --name knote-eks
-      shell: bash
+      # run: aws eks update-kubeconfig --region $(terraform output -raw region) --name $(terraform output -raw cluster_name)
+      run: aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
     # Verify the ckuster info
     - name: Get the information about the cluster Verify the cluster Info
