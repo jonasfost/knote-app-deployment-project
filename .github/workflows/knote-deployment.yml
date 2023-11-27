@@ -38,12 +38,6 @@ jobs:
       run: aws --version
       shell: bash
 
-    # Install kubectl on the docker
-    - uses: azure/setup-kubectl@v2.0
-      with:
-        version: 'v1.24.0' # default is latest stable
-      id: install
-    
     # Configure AWS Credentials for docker access
 		- name: Configure AWS Credentials
 		  uses: aws-actions/configure-aws-credentials@v1
@@ -58,19 +52,28 @@ jobs:
     #     managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
     #     aws-region: us-east-2
 
+    # Install kubectl on the docker
+    - uses: azure/setup-kubectl@v2.0
+      with:
+        version: 'latest' # 'v1.24.0' # default is latest stable
+      id: install
+
     # Kubernetes config update to allow kubectl to work within the context
 		- name: Update kube config to allow kubectl to work within the context
-		  # run: aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }}  --name ${{ env.EKS_CLUSTER }}
+		  shell: bash
+      # run: aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }}  --name ${{ env.EKS_CLUSTER }}
       # run: aws eks update-kubeconfig --region $(terraform output -raw region) --name $(terraform output -raw cluster_name)
       run: aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
     # Verify the ckuster info
     - name: Get the information about the cluster Verify the cluster Info
+      shell: bash
       run: |
         kubectl cluster-info
     
     # Verify all the worker nodes are up
     - name: Verify all the cluster nodes
+      shell: bash
       run: |
         kubectl get nodes
 
@@ -85,12 +88,14 @@ jobs:
     
     # Deploy the app to EKS
 		- name: Deploy knote application to EKS
-		  run: |
+		  shell: bash
+      run: |
 			  kubectl apply -f kube
         kubectl apply -f ingress.yml
 			
 		# Verify the deployment
 		- name: Verify deployment
-		  run: |
+		  shell: bash
+      run: |
         kubectl get pods
 
