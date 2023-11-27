@@ -39,18 +39,18 @@ jobs:
       shell: bash
 
     # Configure AWS Credentials for docker access
-		- name: Configure AWS Credentials
-		  uses: aws-actions/configure-aws-credentials@v1
-		  with:
-        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+		# - name: Configure AWS Credentials
+		#   uses: aws-actions/configure-aws-credentials@v1
+		#   with:
+    #     aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-    # - name: Configure AWS Credentials
-    #   uses: aws-actions/configure-aws-credentials@v4
-    #   with:
-    #     managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
-    #     aws-region: us-east-2
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
+        aws-region: us-east-2
 
     # Install kubectl on the docker
     - uses: azure/setup-kubectl@v2.0
