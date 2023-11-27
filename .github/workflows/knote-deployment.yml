@@ -58,6 +58,15 @@ jobs:
         managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
         aws-region: us-east-2
 
+    # Login to DockerHub and pull the knote image
+		- name: Login to Docker Hub and pull the knote image
+		  uses: docker/login-action@v2
+		  with:
+        username: ${{ env.DOCKER_USER }}
+        password: ${{ env.DOCKER_PASSWORD }}
+      run: |
+        docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
+
     # Kubernetes config update to allow kubectl to work within the context
 		- name: Update kube config to allow kubectl to work within the context
 		  # run: aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }}  --name ${{ env.EKS_CLUSTER }}
@@ -73,15 +82,6 @@ jobs:
     - name: Verify all the cluster nodes
       run: |
         kubectl get nodes
-
-    # Login to DockerHub and pull the knote image
-		- name: Login to Docker Hub and pull the knote image
-		  uses: docker/login-action@v2
-		  with:
-        username: ${{ env.DOCKER_USER }}
-        password: ${{ env.DOCKER_PASSWORD }}
-      run: |
-        docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
     
     # Deploy the app to EKS
 		- name: Deploy knote application to EKS
