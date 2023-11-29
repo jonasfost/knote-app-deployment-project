@@ -64,7 +64,7 @@ jobs:
       # run: aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }}  --name ${{ env.EKS_CLUSTER }}
       # run: aws eks update-kubeconfig --region $(terraform output -raw region) --name $(terraform output -raw cluster_name)
       run: |
-        aws eks update-kubeconfig -region us-east-2 --name knote-eks
+        aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
     # Verify the ckuster info
     - name: Get the information about the cluster Verify the cluster Info
