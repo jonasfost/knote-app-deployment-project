@@ -22,22 +22,22 @@ jobs:
   Kubernete-deployment-on-EKS-cluster:
     # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     name: knote application deployment on EKS cluster
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
 
     # Insall AWS CLI on the container
-    - name: Insall AWS CLI on the container
-      id: install-aws-cli
-      uses: unfor19/install-aws-cli-action@v1
-      with:
-        version: 2     # default
-        verbose: false # default
-        arch: amd64    # allowed values: amd64, arm64
-        rootdir: ""    # defaults to "PWD"
-        workdir: ""    # defaults to "PWD/unfor19-awscli"
+    # - name: Insall AWS CLI on the container
+    #   id: install-aws-cli
+    #   uses: unfor19/install-aws-cli-action@v1
+    #   with:
+    #     version: 2     # default
+    #     verbose: false # default
+    #     arch: amd64    # allowed values: amd64, arm64
+    #     rootdir: ""    # defaults to "PWD"
+    #     workdir: ""    # defaults to "PWD/unfor19-awscli"
 
     # Verify AWS CLI is installed
     - name: Verify AWS CLI is installed
@@ -48,9 +48,9 @@ jobs:
 		- name: Configure AWS Credentials
 		  uses: aws-actions/configure-aws-credentials@v4
 		  with:
-        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
     # - name: Configure AWS Credentials
     #   uses: aws-actions/configure-aws-credentials@v4
