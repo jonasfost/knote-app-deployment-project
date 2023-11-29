@@ -40,9 +40,9 @@ jobs:
     #     workdir: ""    # defaults to "PWD/unfor19-awscli"
 
     # Verify AWS CLI is installed
-    - name: Verify AWS CLI is installed
-      run: aws --version
-      shell: bash
+    # - name: Verify AWS CLI is installed
+    #   run: aws --version
+    #   shell: bash
 
     # Configure AWS Credentials for docker access
 		- name: Configure AWS Credentials
