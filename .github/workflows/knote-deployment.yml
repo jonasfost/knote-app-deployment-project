@@ -45,7 +45,8 @@ jobs:
     #   shell: bash
 
     # Install kubectl on the docker
-    - uses: azure/setup-kubectl@v3
+    - name: Install kubectl on the container
+      uses: azure/setup-kubectl@v3
       with:
         version: 'latest' # 'v1.24.0' # default is latest stable
       id: install
