@@ -29,14 +29,14 @@ jobs:
       uses: actions/checkout@v3
 
     # Insall AWS CLI on the container
-    - name: Insall AWS CLI on the container
-      id: install-aws-cli
-      uses: unfor19/install-aws-cli-action@v1
+    # - name: Insall AWS CLI on the container
+    #   id: install-aws-cli
+    #   uses: unfor19/install-aws-cli-action@v1
 
     # Verify AWS CLI is installed
-    - name: Verify AWS CLI is installed
-      run: aws --version
-      shell: bash
+    # - name: Verify AWS CLI is installed
+    #   run: aws --version
+    #   shell: bash
 
     # Configure AWS Credentials for docker access
 		- name: Configure AWS Credentials
@@ -63,7 +63,7 @@ jobs:
       # run: aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }}  --name ${{ env.EKS_CLUSTER }}
       # run: aws eks update-kubeconfig --region $(terraform output -raw region) --name $(terraform output -raw cluster_name)
       run: |
-        aws eks update-kubeconfig --name knote-eks
+        aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
     # Verify the ckuster info
     - name: Get the information about the cluster
