@@ -14,9 +14,9 @@ on:
   pull-request:
     branches: [main]
 
-# permissions:
-#   id-token: write
-#   contents: read
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   Kubernete-deployment-on-EKS-cluster:
@@ -53,17 +53,17 @@ jobs:
 
     # Configure AWS Credentials for docker access
 		- name: Configure AWS Credentials
-		  uses: aws-actions/configure-aws-credentials@v4
+		  uses: aws-actions/configure-aws-credentials@v1
 		  with:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-    # - name: Configure AWS Credentials
-    #   uses: aws-actions/configure-aws-credentials@v4
-    #   with:
-    #     managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
-    #     aws-region: us-east-2
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
+        aws-region: us-east-2
 
     # Kubernetes config update to allow kubectl to work within the context
 		- name: Update kube config to allow kubectl to work within the context
