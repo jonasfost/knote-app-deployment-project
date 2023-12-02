@@ -42,15 +42,15 @@ jobs:
     #     workdir: ""    # defaults to "PWD/unfor19-awscli"
 
     # Verify AWS CLI is installed
-    # - name: Verify AWS CLI is installed
-    #   run: aws --version
-    #   shell: bash
+    - name: Verify AWS CLI is installed
+      run: aws --version
+      shell: bash
 
     # Install kubectl on the docker
     - name: Install kubectl on the container
       uses: azure/setup-kubectl@v3
       with:
-        version: 'latest' # 'v1.24.0' # default is latest stable
+        version: 'latest' # default is latest stable
       id: install
 
     # Configure AWS Credentials for docker access
@@ -64,9 +64,9 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
     # - name: Configure AWS Credentials
     #   uses: aws-actions/configure-aws-credentials@v4
