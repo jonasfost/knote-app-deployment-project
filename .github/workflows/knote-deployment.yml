@@ -104,12 +104,17 @@ jobs:
         kubectl get nodes
 
     # Login to DockerHub and pull the knote image
-		- name: Login to Docker Hub and pull the knote image
-		  uses: docker/login-action@v2
-		  with:
-        username: ${{ env.DOCKER_USER }}
-        password: ${{ env.DOCKER_PASSWORD }}
+		# - name: Login to Docker Hub and pull the knote image
+		#   uses: docker/login-action@v2
+		#   with:
+    #     username: ${{ env.DOCKER_USER }}
+    #     password: ${{ env.DOCKER_PASSWORD }}
+    #   run: |
+    #     docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
+
+    - name: Login to Docker Hub and pull the knote image
       run: |
+        docker login -u ${{env.DOCKER_USER}} -p ${{env.DOCKER_PASSWORD}}
         docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
     
     # Deploy the app to EKS
