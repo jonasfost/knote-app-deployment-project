@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: name-virtual-host-ingress
 spec:
+  ingressClassName: alb
   rules:
   - host: knote.johnyfoster.com
     http:
