@@ -16,8 +16,8 @@ on:
     branches: [main]
 
 permissions:
-  id-token: write
-  contents: read
+  # id-token: write
+  # contents: read
   actions: read
   security-events: write
 
@@ -60,7 +60,7 @@ jobs:
 		  with:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+        aws-region: us-east-2 # ${{ env.AWS_DEFAULT_REGION }}
 
     # - name: Configure AWS Credentials
     #   uses: aws-actions/configure-aws-credentials@v4
