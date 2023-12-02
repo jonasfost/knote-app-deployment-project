@@ -125,8 +125,9 @@ jobs:
 
     - name: Deploy knote application to EKS
       run: | 
-        kubectl apply -f kube
-        kubectl apply -f ingress.yml
+        kubectl apply -f knote.yml
+        kubectl apply -f minio.yml
+        kubectl apply -f mongo.yml
 
 		# Verify the deployment
 		- name: Verify deployment
