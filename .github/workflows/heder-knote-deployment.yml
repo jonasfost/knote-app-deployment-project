@@ -2,8 +2,8 @@ name: Deploy app to k8s
 env:
   DOCKER_USER: ${{secrets.DOCKER_HUB_USER}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_TOKEN}}
-  DOCKER_REPOSITORY: my-app
-  NODE_IMAGE_TAG: knote
+  DOCKER_REPOSITORY: image-app
+  NODE_IMAGE_TAG: knote-app-v1.0.0
 
 on:
   push:
@@ -50,7 +50,7 @@ jobs:
     #     docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
 
     - name: Authenticate with Docker Registry
-      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin ${{  secrets.DOCKER_HUB_TOKEN }}
+      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password ${{ secrets.DOCKER_HUB_TOKEN }}
       
     # - name:  update kubeconfig
     #   run : |
