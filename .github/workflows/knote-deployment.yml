@@ -118,11 +118,16 @@ jobs:
         docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
     
     # Deploy the app to EKS
-		- name: Deploy knote application to EKS
-      run: |
-			  kubectl apply -f ./kube
+		# - name: Deploy knote application to EKS
+    #   run: |
+			  # kubectl apply -f ./kube
+    #     kubectl apply -f ingress.yml
+
+    - name: Deploy knote application to EKS
+      run: | 
+        kubectl apply -f ./kube
         kubectl apply -f ingress.yml
-			
+
 		# Verify the deployment
 		- name: Verify deployment
 		  shell: bash
