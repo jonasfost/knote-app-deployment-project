@@ -120,7 +120,7 @@ jobs:
     # Deploy the app to EKS
 		- name: Deploy knote application to EKS
       run: |
-			  kubectl apply -f kube
+			  kubectl apply -f ./kube
         kubectl apply -f ingress.yml
 			
 		# Verify the deployment
