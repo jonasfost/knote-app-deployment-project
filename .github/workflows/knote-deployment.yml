@@ -1,4 +1,4 @@
-name: Build and Deploy to Docker Hub
+name: Deploy Knote app to EKS
 env:
   DOCKER_USER: ${{ secrets.DOCKER_HUB_USER }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_TOKEN }}
@@ -21,30 +21,13 @@ permissions:
 
 jobs:
   Kubernete-deployment-on-EKS-cluster:
-    # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    name: knote application deployment on EKS cluster
+    name: knote app deployment on EKS cluster
     runs-on: ubuntu-latest
     steps:
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-
-    # Insall AWS CLI on the container
-    # - name: Insall AWS CLI on the container
-    #   id: install-aws-cli
-    #   uses: unfor19/install-aws-cli-action@v1
-    #   with:
-    #     version: 2     # default
-    #     verbose: false # default
-    #     arch: amd64    # allowed values: amd64, arm64
-    #     rootdir: ""    # defaults to "PWD"
-    #     workdir: ""    # defaults to "PWD/unfor19-awscli"
-
-    # Verify AWS CLI is installed
-    - name: Verify AWS CLI is installed
-      run: aws --version
-      shell: bash
 
     # Install kubectl on the docker
     - name: Install kubectl on the container
@@ -57,9 +40,9 @@ jobs:
 		# - name: Configure AWS Credentials
 		#   uses: aws-actions/configure-aws-credentials@v1
 		#   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    #     aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -74,35 +57,6 @@ jobs:
     #     managed-session-policies: arn:aws:iam::aws:policy/AdministratorAccess
     #     aws-region: us-east-2
 
-    # K8s set context action
-    - name: Set K8s context
-      uses: ossrs/k8s-set-context-action@v1
-      with:
-        kubeconfig: '${{ env.KUBECONFIG }}'
-
-    # Kubernetes config update to allow kubectl to work within the context
-		# - name: Update kube config to allow kubectl to work within the context
-    #   # run: aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }}  --name ${{ env.EKS_CLUSTER }}
-    #   # run: aws eks update-kubeconfig --region $(terraform output -raw region) --name $(terraform output -raw cluster_name)
-    #   run: |
-    #     aws eks update-kubeconfig --region us-east-2 --name knote-eks
-
-    - name: Update kube config to allow kubectl to work within the context
-      run: |
-        aws eks update-kubeconfig --region us-east-2 --name knote-eks
-
-    # Verify the cluster info
-    - name: Get the information about the cluster
-      shell: bash
-      run: |
-        kubectl cluster-info
-    
-    # Verify all the worker nodes are up
-    - name: Verify all the cluster nodes
-      shell: bash
-      run: |
-        kubectl get nodes
-
     # Login to DockerHub and pull the knote image
 		# - name: Login to Docker Hub and pull the knote image
 		#   uses: docker/login-action@v2
@@ -116,6 +70,31 @@ jobs:
       run: |
         docker login -u ${{env.DOCKER_USER}} -p ${{env.DOCKER_PASSWORD}}
         docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
+
+    # K8s set context action
+    - name: Set K8s context
+      uses: ossrs/k8s-set-context-action@v1
+      with:
+        kubeconfig: '${{ env.KUBECONFIG }}'
+
+    # Kubernetes config update to allow kubectl to work within the context
+		# - name: Update kube config to allow kubectl to work within the context
+    #   run: |
+    #     aws eks update-kubeconfig --region us-east-2 --name knote-eks
+
+    - name: Update kube config to allow kubectl to work within the context
+      run: |
+        aws eks update-kubeconfig --region us-east-2 --name knote-eks
+
+    # Verify the cluster info
+    - name: Get the information about the cluster
+      run: |
+        kubectl cluster-info
+    
+    # Verify all the worker nodes are up
+    - name: Verify all the cluster nodes
+      run: |
+        kubectl get nodes
     
     # Deploy the app to EKS
 		# - name: Deploy knote application to EKS
@@ -125,7 +104,9 @@ jobs:
 
     - name: Deploy knote application to EKS
       run: |
-        kubectl apply -f kube/
+        kubectl apply -f knote.yml
+        kubectl apply -f minio.yml
+        kubectl apply -f mongo.yml
 
 		# Verify the deployment
 		- name: Verify deployment
