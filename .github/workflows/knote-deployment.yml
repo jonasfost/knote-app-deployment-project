@@ -15,13 +15,13 @@ on:
 
 permissions:
   # id-token: write
-  # contents: read
+  contents: read
   actions: read
   security-events: write
 
 jobs:
-  Kubernete-deployment-on-EKS-cluster:
-    name: knote app deployment on EKS cluster
+  Deployment-on-EKS-cluster:
+    name:  Deploy knote app on EKS
     runs-on: ubuntu-latest
     steps:
 
@@ -75,7 +75,7 @@ jobs:
     - name: Set K8s context
       uses: ossrs/k8s-set-context-action@v1
       with:
-        kubeconfig: '${{ env.KUBECONFIG }}'
+        kubeconfig: ${{ env.KUBECONFIG }}
 
     # Kubernetes config update to allow kubectl to work within the context
 		# - name: Update kube config to allow kubectl to work within the context
@@ -97,16 +97,16 @@ jobs:
         kubectl get nodes
     
     # Deploy the app to EKS
-		# - name: Deploy knote application to EKS
-    #   run: |
-			  # kubectl apply -f ./kube
-    #     kubectl apply -f ingress.yml
-
-    - name: Deploy knote application to EKS
+		- name: Deploy knote application to EKS
       run: |
-        kubectl apply -f knote.yml
-        kubectl apply -f minio.yml
-        kubectl apply -f mongo.yml
+			  kubectl apply -f ./kube
+        kubectl apply -f ingress.yml
+
+    # - name: Deploy knote application to EKS
+    #   run: |
+    #     kubectl apply -f knote.yml
+    #     kubectl apply -f minio.yml
+    #     kubectl apply -f mongo.yml
 
 		# Verify the deployment
 		- name: Verify deployment
