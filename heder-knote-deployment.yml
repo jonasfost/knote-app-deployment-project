@@ -42,34 +42,14 @@ jobs:
     #     version: 'latest' # default is latest (stable)
     #     token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
     #   id: install
-    
-
-    # - name: Pull Image from Docker Hub    
-    #   run: |
-    #     docker login -u ${{env.DOCKER_USER}} -p ${{env.DOCKER_PASSWORD}}
-    #     docker pull ${{env.DOCKER_USER}}/${{env.DOCKER_REPOSITORY}}:${{env.NODE_IMAGE_TAG}}
 
     - name: Authenticate with Docker Registry
       run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password ${{ secrets.DOCKER_HUB_TOKEN }}
-      
-    # - name:  update kubeconfig
-    #   run : |
-    #      aws eks update-kubeconfig --region us-east-2 --name prod
 
     - name: Set K8s context
       uses: ossrs/k8s-set-context-action@v1
       with:
         kubeconfig: '${{ secrets.KUBECONFIG }}'
-
-    # - name: Run K8s
-    #   run: |-
-    #     kubectl cluster-info
-      
-    # - name: Set imagePullSecret
-    #   run: |
-        
-    #     kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=heder24 --docker-password=Imth@re@ld@de --docker-email=hederredon@gmail.com
-        
 
     - name:  update kubeconfig
       run : |
