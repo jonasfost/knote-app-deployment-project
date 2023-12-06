@@ -19,20 +19,23 @@ permissions:
   
 jobs:
   
-  deploy-app:
+  Deployment-on-EKS-cluster:
     
-    name: Install kubectl and deploy app
+    name: Deploy knote app on EKS
     runs-on: ubuntu-latest
     steps:
+    # Checkout the repository to the GitHub Actions runner
     - name: Check out code
       uses: actions/checkout@v3
     
+    # Install kubectl on the docker
     - name: install kubectl
       uses: azure/setup-kubectl@v3
       with:
         version: 'latest' # default is latest stable
       id: install
 
+     # Configure AWS Credentials for docker access
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
