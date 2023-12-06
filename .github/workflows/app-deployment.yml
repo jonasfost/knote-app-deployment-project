@@ -63,6 +63,11 @@ jobs:
       with:
         kubeconfig: ${{ env.KUBECONFIG }}
 
+    # Verify the cluster info
+    - name: Get the information about the cluster
+      run: |
+        kubectl cluster-info
+
     # Start with fresh file - Removing the kubeconfig file
     - name: Removing ~/.kube/config file
       run: |
