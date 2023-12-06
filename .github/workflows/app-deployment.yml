@@ -63,7 +63,22 @@ jobs:
       with:
         kubeconfig: ${{ env.KUBECONFIG }}
 
+    # Start with fresh file - Removing the kubeconfig file
+    - name: Removing ~/.kube/comfig file
+      run: |
+        rm ~/.kube/config
+
     # Kubernetes config update to allow kubectl to work within the context
+    - name:  update kubeconfig
+      run : |
+         aws eks update-kubeconfig --region us-east-2 --name knote-eks
+
+    # Use KubeCtl to delete the context
+    - name: Use KubeCtl to delete the context
+      run: |
+        kubectl config delete-context arn:aws:eks:us-east-2:440141975857:cluster/knote-eks
+
+     # RE-Apply the Kubernetes config to allow kubectl to work within the context
     - name:  update kubeconfig
       run : |
          aws eks update-kubeconfig --region us-east-2 --name knote-eks
