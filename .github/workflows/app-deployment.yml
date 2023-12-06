@@ -84,7 +84,7 @@ jobs:
         kubectl config delete-context arn:aws:eks:us-east-2:440141975857:cluster/knote-eks
 
      # RE-Apply the Kubernetes config to allow kubectl to work within the context
-    - name:  update kubeconfig
+    - name:  Re-update kubeconfig
       run : |
          aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
