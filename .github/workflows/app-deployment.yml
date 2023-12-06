@@ -1,4 +1,4 @@
-name: Deploy app to k8s
+name: Knote app deployment to EKS
 env:
   DOCKER_USER: ${{secrets.DOCKER_HUB_USER}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_TOKEN}}
