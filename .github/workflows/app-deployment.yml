@@ -1,0 +1,81 @@
+name: Deploy app to k8s
+env:
+  DOCKER_USER: ${{secrets.DOCKER_HUB_USER}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_TOKEN}}
+  AWS_ACCESS_KEY_ID : ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  KUBECONFIG: ${{ secrets.KUBECONFIG }}
+  DOCKER_REPOSITORY: image-app
+  NODE_IMAGE_TAG: knote-app-v1.0.0
+
+on:
+  push:
+    branches: [ main]
+
+permissions:
+  actions: read
+  security-events: write
+  
+jobs:
+  
+  deploy-app:
+    
+    name: Install kubectl and deploy app
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    
+    - name: install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest' # default is latest stable
+      id: install
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    # - name: install helm 
+    #   uses: azure/setup-helm@v3
+    #   with:
+    #     version: 'latest' # default is latest (stable)
+    #     token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+    #   id: install
+
+    # Login to Docker Hub and pull the knote image
+    - name: Authenticate with Docker Registry and pull image
+      # run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password ${{ secrets.DOCKER_HUB_TOKEN }}
+      run: |
+        docker login -u ${{ env.DOCKER_USER }} --password ${{ env.DOCKER_PASSWORD }}
+        docker pull ${{ env.DOCKER_USER }}/${{ env.DOCKER_REPOSITORY }}:${{ env.NODE_IMAGE_TAG }}
+
+    # K8s set context action
+    - name: Set K8s context
+      uses: ossrs/k8s-set-context-action@v1
+      with:
+        kubeconfig: '${{ env.KUBECONFIG }}'
+
+    # Kubernetes config update to allow kubectl to work within the context
+    - name:  update kubeconfig
+      run : |
+         aws eks update-kubeconfig --region us-east-2 --name knote-eks
+
+    # Verify the cluster info
+    - name: Get the information about the cluster
+      run: |
+        kubectl cluster-info
+    
+    # Verify all the worker nodes are up
+    - name: Verify all the cluster nodes
+      run: |
+        kubectl get nodes
+
+     # Deploy the app to EKS
+    - name: Deploy to EKS
+      run: | 
+        kubectl apply -f ./kube
