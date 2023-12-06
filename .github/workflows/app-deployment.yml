@@ -61,7 +61,7 @@ jobs:
     - name: Set K8s context
       uses: ossrs/k8s-set-context-action@v1
       with:
-        kubeconfig: '${{ env.KUBECONFIG }}'
+        kubeconfig: ${{ env.KUBECONFIG }}
 
     # Kubernetes config update to allow kubectl to work within the context
     - name:  update kubeconfig
