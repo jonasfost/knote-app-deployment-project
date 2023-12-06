@@ -81,7 +81,7 @@ jobs:
      # RE-Apply the Kubernetes config to allow kubectl to work within the context
     - name:  update kubeconfig
       run : |
-         aws eks update-kubeconfig --region us-east-2 --name knote-eks
+        aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
     # Verify the cluster info
     - name: Get the information about the cluster
