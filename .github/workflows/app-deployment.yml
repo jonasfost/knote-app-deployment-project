@@ -101,7 +101,7 @@ jobs:
     # Verify the deployment
 		- name: Verify deployment
       run: |
-        kubectl get pod -o wide
+        kubectl get pod
 
     # Verify the service
 		- name: Verify deployment
