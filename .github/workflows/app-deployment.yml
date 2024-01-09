@@ -80,5 +80,4 @@ jobs:
 
      # Deploy the app to EKS
     - name: Deploy to EKS
-      run: | 
-        kubectl apply -f ./kube
+      run: kubectl apply -f ./kube
