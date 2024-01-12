@@ -44,7 +44,7 @@ jobs:
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
     # Installing Helm Binary on the Docker
-    - name: install helm 
+    - name: Install helm 
       uses: azure/setup-helm@v3
       with:
         version: 'latest' # default is latest (stable)
@@ -65,7 +65,7 @@ jobs:
         kubeconfig: ${{ env.KUBECONFIG }}
 
     # Kubernetes config update to allow kubectl to work within the context
-    - name:  update kubeconfig
+    - name:  Update kubeconfig
       run : |
         aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
@@ -80,7 +80,7 @@ jobs:
         kubectl get nodes
 
     # Deploy the app to EKS
-    - name: Deploy to EKS
+    - name: Deploy the app to EKS
       run: |
         kubectl apply -f ./kube
 
