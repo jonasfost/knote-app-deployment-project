@@ -1,4 +1,4 @@
-name: Knote app deployment to EKS
+name: Deploy Knote App to EKS
 env:
   DOCKER_USER: ${{secrets.DOCKER_HUB_USER}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_TOKEN}}
@@ -19,9 +19,9 @@ permissions:
   
 jobs:
   
-  Deployment-on-EKS-cluster:
+  Deploy-on-EKS-cluster:
     
-    name: Deploy knote app on EKS
+    name: Deploy Knote App on EKS
     runs-on: ubuntu-latest
     steps:
     # Checkout the repository to the GitHub Actions runner
