@@ -33,7 +33,7 @@ jobs:
       uses: azure/setup-kubectl@v3
       with:
         version: 'latest' # default is latest stable
-      id: install
+      id: install-kubectl
 
      # Configure AWS Credentials for docker access
     - name: Configure AWS Credentials
@@ -43,12 +43,13 @@ jobs:
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-    # - name: install helm 
-    #   uses: azure/setup-helm@v3
-    #   with:
-    #     version: 'latest' # default is latest (stable)
-    #     token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
-    #   id: install
+    # Installing Helm Binary on the Docker
+    - name: install helm 
+      uses: azure/setup-helm@v3
+      with:
+        version: 'latest' # default is latest (stable)
+        token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+      id: install-helm
 
     # Login to Docker Hub and pull the knote image
     - name: Authenticate with Docker Registry and pull image
@@ -78,7 +79,25 @@ jobs:
       run: |
         kubectl get nodes
 
-     # Deploy the app to EKS
+    # Deploy the app to EKS
     - name: Deploy to EKS
       run: |
         kubectl apply -f ./kube
+
+    # Install the collection of YAML files necessary to run the ALB Ingress Controller.
+    - name: Configure ALB Ingress Controller
+      run: |
+        helm repo add eks https://aws.github.io/eks-charts
+        helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set autoDiscoverAwsRegion=true --set autoDiscoverAwsVpcID=true --set clusterName=knote-eks
+
+    # Verify that the Ingress controller is running
+    - name: Verify that the Ingress controller is running
+      run: |
+        kubectl get pods -l "app.kubernetes.io/name=aws-load-balancer-controller"
+
+    # Submit the Ingress manifest to our cluster
+    - name: Submit Ingress Manifest to the cluster
+      run: |
+        kubectl apply -f ingress.yaml
+
+    

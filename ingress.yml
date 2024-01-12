@@ -1,25 +1,44 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: knote
+# spec:
+#   ingressClassName: alb
+#   rules:
+#   - host: knote.johnyfoster.com
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: "/"
+#         backend:
+#           service:
+#             name: knote
+#             port:
+#               number: 80
+#   - host: www.knote.johnyfoster.com
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: "/"
+#         backend:
+#           service:
+#             name: knote
+#             port:
+#               number: 80
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: name-virtual-host-ingress
+  name: knote
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    kubernetes.io/ingress.class: alb
 spec:
-  ingressClassName: alb
   rules:
-  - host: knote.johnyfoster.com
-    http:
+  - http:
       paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: knote
-            port:
-              number: 80
-  - host: www.knote.johnyfoster.com
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: knote
