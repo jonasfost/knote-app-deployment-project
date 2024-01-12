@@ -91,7 +91,7 @@ jobs:
         helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set autoDiscoverAwsRegion=true --set autoDiscoverAwsVpcID=true --set clusterName=knote-eks
 
     # Verify that the Ingress controller is running
-    - name: Verify that the Ingress controller is running
+    - name: Verify the Ingress controller is running
       run: |
         kubectl get pods -l "app.kubernetes.io/name=aws-load-balancer-controller"
 
