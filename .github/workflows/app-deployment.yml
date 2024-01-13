@@ -66,13 +66,11 @@ jobs:
 
     # Kubernetes config update to allow kubectl to work within the context
     - name:  Update kubeconfig
-      run : |
-        aws eks update-kubeconfig --region us-east-2 --name knote-eks
+      run : aws eks update-kubeconfig --region us-east-2 --name knote-eks
 
     # Verify the cluster info
     - name: Get the information about the cluster
-      run: |
-        kubectl cluster-info
+      run: kubectl cluster-info
     
     # Verify all the worker nodes are up
     - name: Verify all the cluster nodes
