@@ -82,7 +82,7 @@ jobs:
       run: |
         kubectl apply -f ./kube
 
-    Install the collection of YAML files necessary to run the ALB Ingress Controller.
+    # Install the collection of YAML files necessary to run the ALB Ingress Controller.
     - name: Configure ALB Ingress Controller
       run: |
         helm repo add eks https://aws.github.io/eks-charts
