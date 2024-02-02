@@ -96,6 +96,6 @@ jobs:
     # Submit the Ingress manifest to our cluster
     - name: Submit Ingress Manifest to the cluster
       run: |
-        kubectl apply -f ingress.yaml
+        kubectl apply -f ingress.yml
 
     
