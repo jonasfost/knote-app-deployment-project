@@ -83,19 +83,19 @@ jobs:
         kubectl apply -f ./kube
 
     # Install the collection of YAML files necessary to run the ALB Ingress Controller.
-    - name: Configure ALB Ingress Controller
-      run: |
-        helm repo add eks https://aws.github.io/eks-charts
-        helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set autoDiscoverAwsRegion=true --set autoDiscoverAwsVpcID=true --set clusterName=knote-eks
+    # - name: Configure ALB Ingress Controller
+    #   run: |
+    #     helm repo add eks https://aws.github.io/eks-charts
+    #     helm install aws-load-balancer-controller eks/aws-load-balancer-controller --set autoDiscoverAwsRegion=true --set autoDiscoverAwsVpcID=true --set clusterName=knote-eks
 
-    # Verify that the Ingress controller is running
-    - name: Verify the Ingress controller is running
-      run: |
-        kubectl get pods -l "app.kubernetes.io/name=aws-load-balancer-controller"
+    # # Verify that the Ingress controller is running
+    # - name: Verify the Ingress controller is running
+    #   run: |
+    #     kubectl get pods -l "app.kubernetes.io/name=aws-load-balancer-controller"
 
-    # Submit the Ingress manifest to our cluster
-    - name: Submit Ingress Manifest to the cluster
-      run: |
-        kubectl apply -f ingress.yaml
+    # # Submit the Ingress manifest to our cluster
+    # - name: Submit Ingress Manifest to the cluster
+    #   run: |
+    #     kubectl apply -f ingress.yaml
 
     
